@@ -1,4 +1,7 @@
 import { h } from 'hyperapp'
 import picostyle from 'picostyle'
 
-export default picostyle(h)
+const { style, css } = picostyle(h, { returnObject: true })
+
+export { css }
+export default style

@@ -4,12 +4,15 @@ import style from '../style'
 const Container = style('button')({
   position: 'relative',
   outline: 'none',
-  border: '1px solid #222',
+  border: '1px solid #121212',
   boxShadow: 'none',
   padding: '0.33rem 0.66rem',
   backgroundColor: 'transparent',
   borderRadius: '4px',
   overflow: 'hidden',
+  'a:disabled': {
+    opacity: '0.5'
+  },
   '&:before': {
     content: '""',
     display: 'block',

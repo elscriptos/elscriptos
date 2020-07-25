@@ -6,7 +6,7 @@ export function saveStore({
   separator
 }) {
   const data = {
-    cache: Array.from(cache.entries()),
+    cache,
     userStickers,
     separator
   }
@@ -15,13 +15,9 @@ export function saveStore({
 
 export function loadStore() {
   const data = localStorage.getItem(config.localStorageKey)
-  if (!data) return null;
+  if (!data) return;
   try {
-    const save = JSON.parse(data)
-    return {
-      ...save,
-      cache: new Map(save.cache)
-    }
+    return JSON.parse(data)
   } catch(e) {
     console.warn('Cannot load elscriptos save :\'(', e)
   }

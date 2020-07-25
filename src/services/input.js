@@ -4,8 +4,8 @@ import { getContentStickers, getPreview, makeGetSavedSticker } from './stickers'
 function replaceContentWithStickers(inputValue, contentStickers, separator) {
   return contentStickers.reduce((acc, contentSticker) =>
     acc.replace(
-      new RegExp(`${separator}${contentSticker.value}${separator}`, 'gm'),
-      contentSticker.sticker
+      new RegExp(`${separator}${contentSticker.code}${separator}`, 'gm'),
+      contentSticker.url
     ),
     inputValue
   )
@@ -30,7 +30,7 @@ export function fillInput({
     .filter((match, i, arr) => arr.indexOf(match) === i)
     .map(match => ({
       sticker: getSavedSticker(match),
-      value: match
+      code: match
     }))
     .filter(data => data.sticker != null)
   editor.value = replaceContentWithStickers(inputValue, contentStickers, separator)
@@ -47,4 +47,6 @@ export async function fillPreview({
   const content = replaceContentWithStickers(inputValue, contentStickers, separator)
   const previewHTML = await getPreview(content)
   preview.innerHTML = previewHTML
+
+  return contentStickers.filter(({ code }) => userStickers[code] === undefined && cache[code] === undefined)
 }

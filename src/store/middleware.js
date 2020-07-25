@@ -1,9 +1,7 @@
 import { Types, Creators } from './actionTypes'
 import { editor } from '../services/elements'
 import { fillPreview, fillInput } from '../services/input'
-import callEach from '../utils/callEach'
-import { saveCache } from '../services/persistence'
-import userSticker from '../models/userSticker'
+import { setFromObject } from '../utils/object'
 
 function handleRisibankStickerAdded(store) {
   const { value } = editor
@@ -13,8 +11,13 @@ function handleRisibankStickerAdded(store) {
   }
 }
 
-function handleInputChanged(store) {
-  fillPreview(store.getState())
+async function handleInputChanged(store) {
+  const fetchedStickers = await fillPreview(store.getState())
+  const partialCache = fetchedStickers
+    .reduce((acc, data) =>
+      setFromObject(acc, data.code, data.url),
+      {})
+  store.dispatch(Creators.partialCacheAdded(partialCache))
 }
 
 function handlePostButtonClicked(store) {

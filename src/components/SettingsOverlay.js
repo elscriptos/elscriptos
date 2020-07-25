@@ -1,20 +1,23 @@
-import { h, text, app } from 'hyperapp'
-import style from './style'
+import { h, app } from 'hyperapp'
+import style, { css } from './style'
 import store from '../store'
 import { simpleEvent } from '../utils/event'
 import { Creators } from '../store/actionTypes'
-import StickerList from './StickerList'
-import StickerListHeader from './StickerListHeader'
+import UserStickers from './stickers/UserStickers'
 import reduxSubscription from '../utils/reduxSubscription'
+import RecentStickers from './stickers/RecentStickers'
+import Card from './commons/Card'
 
 const container = document.createElement('div')
 document.body.appendChild(container)
 
 const Wrapper = style('div')({
   position: 'fixed',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  gridTemplateRows: 'repeat(2, 1fr)',
+  gridGap: '3rem',
+  padding: '4rem 6rem ',
   top: '0',
   left: '0',
   zIndex: '1999999999',
@@ -30,18 +33,8 @@ const Wrapper = style('div')({
   }
 })
 
-const Container = style('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.5)',
-  borderRadius: '4px',
-  maxWidth: 'calc(100vw - 1rem)',
-  maxHeight: 'calc(100vh - 1rem)',
-  backgroundColor: 'rgba(50, 50, 50, 0.9)',
-  color: 'white',
-  width: '800px',
-  height: '800px',
-  overflowY: 'hidden'
+const UserStickersClass = css({
+  gridColumn: '1 / 3'
 })
 
 const cancelBubbling = simpleEvent()
@@ -50,10 +43,12 @@ const handleWrapperClick = simpleEvent(() => {
   store.dispatch(Creators.overlayToggled())
 })
 
-const SettingsModal = ({
+const SettingsOverlay = ({
   isOpen,
   stickers,
-  addForm
+  stickerForm,
+  cache,
+  formMode
 }) => (
   h('div', {}, [
     isOpen && (
@@ -61,15 +56,21 @@ const SettingsModal = ({
         {
           onclick: handleWrapperClick
         },
-        Container(
-          {
-            onclick: cancelBubbling
-          },
-          [
-            StickerListHeader({ addForm }),
-            StickerList({ stickers })
-          ]
-        )
+        [
+          Card(
+            {
+              onclick: cancelBubbling,
+              class: UserStickersClass
+            },
+            UserStickers({ stickers, stickerForm, formMode })
+          ),
+          Card(
+            {
+              onclick: cancelBubbling
+            },
+            RecentStickers({ cache })
+          )
+        ]
       )
     )
   ])
@@ -78,7 +79,8 @@ const SettingsModal = ({
 function mapStoreToState(storeState) {
   return {
     isOpen: storeState.isOverlayOpen,
-    stickers: storeState.userStickers
+    stickers: storeState.userStickers,
+    cache: storeState.cache
   }
 }
 
@@ -86,12 +88,14 @@ app({
   init: {
     isOpen: false,
     stickers: [],
-    addForm: {
+    formMode: 'ajouter',
+    stickerForm: {
+      lastCode: '',
       code: '',
       url: ''
     }
   },
-  view: SettingsModal,
+  view: SettingsOverlay,
   subscriptions: (state) => [
     [reduxSubscription(store, mapStoreToState), state]
   ],

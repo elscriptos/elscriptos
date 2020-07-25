@@ -5,9 +5,11 @@ function wrapAppContent(appContent) {
 // ==UserScript==
 // @name         ElScriptos
 // @namespace    ElScriptos - Risibank
-// @version      0.0.1
+// @version      0.0.2
 // @description  ElScriptos, des stickers sans cliquer
 // @author       ElScriptos Team
+// @downloadURL  https://raw.githubusercontent.com/elscriptos/elscriptos/master/dist/index.js
+// @updateURL    https://raw.githubusercontent.com/elscriptos/elscriptos/master/dist/index.js
 // @match        https://www.jeuxvideo.com/forums/*
 // @match        https://m.jeuxvideo.com/forums/*
 // @match        https://m.jeuxvideo.com/forums/*

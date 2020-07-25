@@ -1,11 +1,11 @@
 import config from '../config'
 
 import { Types } from './actionTypes'
-import userSticker from '../models/userSticker'
+import { removeFromObject, setFromObject } from '../utils/object'
 
 const INITIAL_STATE = {
-  cache: new Map(), // will mutate for performance reason, persistence will still work
-  userStickers: [],
+  cache: {},
+  userStickers: {},
   inputValue: '',
   isOverlayOpen: false,
   separator: config.separator
@@ -25,10 +25,36 @@ export default function reducer(
     case Types.USER_STICKER_ADDED:
       return {
         ...state,
-        userStickers: [
-          ...state.userStickers,
-          userSticker(action.code, action.url)
-        ]
+        userStickers: setFromObject(state.userStickers, action.code, action.url)
+      }
+    case Types.USER_STICKER_REMOVED:
+      return {
+        ...state,
+        userStickers: removeFromObject(state.userStickers, action.code)
+      }
+    case Types.USER_STICKER_EDITED:
+      return {
+        ...state,
+        userStickers: setFromObject(
+          removeFromObject(state.userStickers, action.lastCode),
+          action.code,
+          action.url
+        )
+      }
+    case Types.PARTIAL_CACHE_ADDED:
+      const nextCache = {
+        ...action.partialCache,
+        ...state.cache
+      }
+      return {
+        ...state,
+        cache: Object
+          .keys(nextCache)
+          .slice(0, config.maxCacheSize)
+          .reduce((acc, key) =>
+            setFromObject(acc, key, nextCache[key]),
+            {}
+          )
       }
     default:
       return state

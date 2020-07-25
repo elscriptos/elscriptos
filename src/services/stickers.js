@@ -1,7 +1,7 @@
 import config from '../config'
 import smileys from '../constants/smileys'
 
-const createContentSticker = (value, sticker) => ({ value, sticker })
+const createContentSticker = (code, url) => ({ code, url })
 
 export async function getStickers(search) {
   const response = await fetch(`${config.apiURI}/search`, {
@@ -31,7 +31,6 @@ export async function getContentStickers(
   userStickers,
   separator
 ) {
-
   const searchStickers = stickerValues
     .filter((stickerValue, i, arr) => arr.indexOf(stickerValue) === i)
     .map(stickerValue => ({
@@ -47,12 +46,11 @@ export async function getContentStickers(
       if (savedSticker) {
         return createContentSticker(searchSticker.raw, savedSticker)
       }
-      const isOverriding = separator === ':' && smileys.includes(searchSticker.raw)
-      if (isOverriding) return null;
+      const isOverwriting = separator === ':' && smileys.includes(searchSticker.raw)
+      if (isOverwriting) return null;
       return getStickers(searchSticker.search)
         .then(stickers => {
           if (stickers.length === 0) return null;
-          cache.set(searchSticker.raw, stickers[0].risibank_link);
           return createContentSticker(searchSticker.raw, stickers[0].risibank_link)
         })
     })
@@ -65,9 +63,9 @@ export async function getContentStickers(
 
 export const makeGetSavedSticker = (cache, userStickers, separator) =>
   match => {
-    const isOverriding = separator === ':' && smileys.includes(match)
-    const userSticker = userStickers.find(({ code }) => code === match)
-    if (userSticker) return userSticker.url
-    if (isOverriding) return null
-    return cache.get(match)
+    const isOverwriting = separator === ':' && smileys.includes(match)
+    const userSticker = userStickers[match]
+    if (userSticker) return userSticker
+    if (isOverwriting) return null
+    return cache[match]
   }
