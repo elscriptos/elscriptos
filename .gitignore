@@ -1,0 +1,9 @@
+public/
+node_modules/
+
+.cache/
+
+index_files/
+
+dist/index.html
+dist/src.*
