@@ -123,6 +123,7 @@ const AddStickerForm = ({
         Button(
           {
             class: ButtonClass,
+            warning: true,
             onclick: handleRemoveSticker
           },
           text('Suprimer')
@@ -130,6 +131,7 @@ const AddStickerForm = ({
       Button(
         {
           class: ButtonClass,
+          primary: true,
           onclick: formMode === 'modifier' ? handleEditSticker : handleAddSticker
         },
         text(formMode === 'modifier' ? 'Modifier' : 'Ajouter')

@@ -2,10 +2,12 @@ import config from '../config'
 
 import { Types } from './actionTypes'
 import { removeFromObject, setFromObject } from '../utils/object'
+import { createMetaStickers } from '../services/stickers'
 
 const INITIAL_STATE = {
   cache: {},
   userStickers: {},
+  metaStickers: createMetaStickers(),
   inputValue: '',
   isOverlayOpen: false,
   separator: config.separator
@@ -55,6 +57,11 @@ export default function reducer(
             setFromObject(acc, key, nextCache[key]),
             {}
           )
+      }
+    case Types.META_STICKERS_LOADED:
+      return {
+        ...state,
+        metaStickers: action.metaStickers
       }
     default:
       return state

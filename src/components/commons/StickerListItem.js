@@ -4,7 +4,7 @@ import style from '../style'
 
 const Wrapper = style('div')({
   padding: '2px',
-  borderRadius: '4px',
+  borderRadius: '7px',
   background: 'transparent',
   transition: 'background 0.3s',
   '&.--overwriting': {
@@ -27,8 +27,7 @@ const Container = style('div')({
   height: '100%',
   width: '100%',
   backgroundColor: 'white',
-  borderRadius: '4px',
-  border: '1px solid #121212',
+  borderRadius: '7px',
   '&:hover > span': {
     opacity: '0'
   }

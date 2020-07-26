@@ -29,10 +29,10 @@ export function fillInput({
   const contentStickers = matchs
     .filter((match, i, arr) => arr.indexOf(match) === i)
     .map(match => ({
-      sticker: getSavedSticker(match),
+      url: getSavedSticker(match),
       code: match
     }))
-    .filter(data => data.sticker != null)
+    .filter(data => data.url != null)
   editor.value = replaceContentWithStickers(inputValue, contentStickers, separator)
 }
 

@@ -12,6 +12,10 @@ const postButtonClicked = () => ({
   type: Types.POST_BUTTON_CLICKED
 })
 
+const metaStickersLoaded = (metaStickers) => ({
+  type: Types.META_STICKERS_LOADED,
+  metaStickers
+})
 
 const overlayToggled = () => ({
   type: Types.OVERLAY_TOGGLED
@@ -62,6 +66,7 @@ export const Types = {
   USER_STICKER_ADDED: 'USER_STICKER_ADDED',
   USER_STICKER_REMOVED: 'USER_STICKER_REMOVED',
   USER_STICKER_EDITED: 'USER_STICKER_EDITED',
+  META_STICKERS_LOADED: 'META_STICKERS_LOADED',
 }
 
 export const Creators = {
@@ -75,5 +80,6 @@ export const Creators = {
   // MODAL
   userStickerAdded,
   userStickerRemoved,
-  userStickerEdited
+  userStickerEdited,
+  metaStickersLoaded
 }

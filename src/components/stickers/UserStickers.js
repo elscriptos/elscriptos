@@ -9,6 +9,7 @@ import { stateEvent } from '../../utils/event'
 const Section = style('section')({
   display: 'flex',
   flex: '1',
+  minHeight: '0',
   flexDirection: 'column'
 })
 
@@ -37,6 +38,7 @@ const renderSticker = (stickerForm) =>
     const editing = stickerForm.lastCode === code
     const overwriting = stickerForm.code === code
     return StickerListItem({
+      key: code,
       code,
       url,
       editing,

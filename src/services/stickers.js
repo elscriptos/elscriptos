@@ -3,6 +3,12 @@ import smileys from '../constants/smileys'
 
 const createContentSticker = (code, url) => ({ code, url })
 
+export const createMetaStickers = (
+  recent = [],
+  trending = [],
+  random = []
+) => ({ recent, trending, random })
+
 export async function getStickers(search) {
   const response = await fetch(`${config.apiURI}/search`, {
     method: 'POST',
@@ -23,6 +29,17 @@ export async function getPreview(content) {
     body: formData
   })
   return await response.text() || ''
+}
+
+export async function getMetaStickers() {
+  const response = await fetch(`${config.apiURI}/load`)
+  const data = await response.json()
+  if (data == null || typeof data.stickers !== 'object') return createMetaStickers()
+  return createMetaStickers(
+    data.stickers.tms,
+    data.stickers.trending,
+    data.stickers.random
+  )
 }
 
 export async function getContentStickers(

@@ -1,17 +1,22 @@
 import { h } from 'hyperapp'
+import classNames from 'classnames'
 import style from '../style'
 
 const Container = style('button')({
   position: 'relative',
   outline: 'none',
-  border: '1px solid #121212',
   boxShadow: 'none',
+  border: 'none',
   padding: '0.33rem 0.66rem',
-  backgroundColor: 'transparent',
-  borderRadius: '4px',
+  backgroundColor: 'rgba(18, 20, 22, 0.5)',
+  borderRadius: '7px',
   overflow: 'hidden',
-  'a:disabled': {
-    opacity: '0.5'
+  userSelect: 'none',
+  '&.--primary': {
+    backgroundColor: 'rgba(0, 50, 102, 0.5)'
+  },
+  '&.--warning': {
+    backgroundColor: 'rgba(102, 20, 0, 0.5)'
   },
   '&:before': {
     content: '""',
@@ -37,7 +42,7 @@ const Container = style('button')({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%) scale(0)',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(9, 10, 11, 1)',
     width: '150%',
     height: '0px',
     paddingBottom: '150%',
@@ -45,11 +50,23 @@ const Container = style('button')({
     borderRadius: '50%',
     transition: 'all 0.2s'
   },
+  '&.--primary:after': {
+    backgroundColor: 'rgba(0, 25, 51, 1)'
+  },
+  '&.--warning:after': {
+    backgroundColor: 'rgba(51, 10, 0, 1)'
+  },
   '&:hover': {
     cursor: 'pointer',
   },
   '&:hover::before': {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    backgroundColor: 'rgba(18, 20, 22, 1)',
+  },
+  '&.--primary:hover::before': {
+    backgroundColor: 'rgba(0, 50, 102, 1)'
+  },
+  '&.--warning:hover::before': {
+    backgroundColor: 'rgba(102, 20, 0, 1)'
   },
   '&:active::after': {
     transform: 'translate(-50%, -50%) scale(1)',
@@ -57,9 +74,19 @@ const Container = style('button')({
   }
 })
 
-const Button = (props, children) => (
+const Button = ({
+  primary,
+  warning,
+  ...rest
+}, children) => (
   Container(
-    props,
+    {
+      ...rest,
+      class: classNames(rest.class, {
+        '--primary': primary,
+        '--warning': warning
+      })
+    },
     h('span', {}, children)
   )
 )

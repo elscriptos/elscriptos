@@ -7,6 +7,8 @@ import UserStickers from './stickers/UserStickers'
 import reduxSubscription from '../utils/reduxSubscription'
 import RecentStickers from './stickers/RecentStickers'
 import Card from './commons/Card'
+import { createMetaStickers } from '../services/stickers'
+import MetaStickers from './stickers/MetaStickers'
 
 const container = document.createElement('div')
 document.body.appendChild(container)
@@ -14,9 +16,9 @@ document.body.appendChild(container)
 const Wrapper = style('div')({
   position: 'fixed',
   display: 'grid',
-  gridTemplateColumns: 'repeat(2, 1fr)',
+  gridTemplateColumns: 'repeat(3, 1fr)',
   gridTemplateRows: 'repeat(2, 1fr)',
-  gridGap: '3rem',
+  gridGap: '1rem',
   padding: '4rem 6rem ',
   top: '0',
   left: '0',
@@ -24,7 +26,7 @@ const Wrapper = style('div')({
   height: '100vh',
   width: '100%',
   backdropFilter: 'blur(5px)',
-  backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  backgroundColor: 'rgba(30, 32, 37, 0.95)',
   '&:hover': {
     cursor: 'zoom-out'
   },
@@ -34,7 +36,15 @@ const Wrapper = style('div')({
 })
 
 const UserStickersClass = css({
-  gridColumn: '1 / 3'
+  gridColumn: '1 / 4'
+})
+
+const RecentStickersClass = css({
+  gridColumn: '1'
+})
+
+const MetaStickersClass = css({
+  gridColumn: '2 / 4'
 })
 
 const cancelBubbling = simpleEvent()
@@ -47,6 +57,8 @@ const SettingsOverlay = ({
   isOpen,
   stickers,
   stickerForm,
+  metaStickers,
+  metaMode,
   cache,
   formMode
 }) => (
@@ -66,9 +78,17 @@ const SettingsOverlay = ({
           ),
           Card(
             {
-              onclick: cancelBubbling
+              onclick: cancelBubbling,
+              class: RecentStickersClass
             },
             RecentStickers({ cache })
+          ),
+          Card(
+            {
+              onclick: cancelBubbling,
+              class: MetaStickersClass
+            },
+            MetaStickers({ metaStickers, metaMode })
           )
         ]
       )
@@ -80,6 +100,7 @@ function mapStoreToState(storeState) {
   return {
     isOpen: storeState.isOverlayOpen,
     stickers: storeState.userStickers,
+    metaStickers: storeState.metaStickers,
     cache: storeState.cache
   }
 }
@@ -88,7 +109,9 @@ app({
   init: {
     isOpen: false,
     stickers: [],
+    metaStickers: createMetaStickers(),
     formMode: 'ajouter',
+    metaMode: 'trending',
     stickerForm: {
       lastCode: '',
       code: '',

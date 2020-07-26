@@ -2,6 +2,7 @@ import { Types, Creators } from './actionTypes'
 import { editor } from '../services/elements'
 import { fillPreview, fillInput } from '../services/input'
 import { setFromObject } from '../utils/object'
+import { getMetaStickers } from '../services/stickers'
 
 function handleRisibankStickerAdded(store) {
   const { value } = editor
@@ -24,10 +25,16 @@ function handlePostButtonClicked(store) {
   fillInput(store.getState())
 }
 
+async function handleOverlayToggled(store) {
+  const metaStickers = await getMetaStickers()
+  store.dispatch(Creators.metaStickersLoaded(metaStickers))
+}
+
 const handlers = {
   [Types.RISIBANK_STICKER_ADDED]: handleRisibankStickerAdded,
   [Types.INPUT_CHANGED]: handleInputChanged,
-  [Types.POST_BUTTON_CLICKED]: handlePostButtonClicked
+  [Types.POST_BUTTON_CLICKED]: handlePostButtonClicked,
+  [Types.OVERLAY_TOGGLED]: handleOverlayToggled
 }
 
 export default store => next => action => {
