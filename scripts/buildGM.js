@@ -1,11 +1,12 @@
 const fs = require('fs')
+const package = require('../package.json');
 
 function wrapAppContent(appContent) {
     return `
 // ==UserScript==
 // @name         ElScriptos
 // @namespace    ElScriptos - Risibank
-// @version      0.0.3
+// @version      ${package.version}
 // @description  ElScriptos, des stickers sans cliquer
 // @author       ElScriptos Team
 // @downloadURL  https://raw.githubusercontent.com/elscriptos/elscriptos/master/dist/index.js
