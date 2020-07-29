@@ -1,9 +1,10 @@
-import style, { css } from '../style'
+import style from '../style'
 import StickerListItem from '../commons/StickerListItem'
 import SectionHeader from '../commons/SectionHeader'
 import ModeSwitch from '../commons/ModeSwitch'
 import StickerGrid from '../commons/StickerGrid'
 import AddStickerForm from '../forms/AddStickerForm'
+import SearchStickersForm from '../forms/SearchStickersForm'
 import { stateEvent } from '../../utils/event'
 
 const Section = style('section')({
@@ -15,7 +16,7 @@ const Section = style('section')({
 
 const handleModeClick = stateEvent((state, _, mode) => ({
   ...state,
-  formMode: mode.id,
+  stickerFormMode: mode.id,
   stickerForm: {
     code: '',
     lastCode: '',
@@ -25,7 +26,7 @@ const handleModeClick = stateEvent((state, _, mode) => ({
 
 const handleStickerClick = (code, url) => stateEvent(state => ({
   ...state,
-  formMode: 'modifier',
+  stickerFormMode: state.stickerFormMode === 'search' ? 'ajouter' : 'modifier',
   stickerForm: {
     lastCode: code,
     code,
@@ -47,7 +48,20 @@ const renderSticker = (stickerForm) =>
     })
   }
 
+const renderSearchSticker = ({ risibank_link: url }) => 
+  StickerListItem({
+    key: url,
+    code: '',
+    url,
+    onclick: handleStickerClick('', url)
+  })
+
 const modes = [
+  {
+    id: 'search',
+    label: 'Rechercher',
+    selectable: true
+  },
   {
     id: 'ajouter',
     label: 'Ajouter',
@@ -62,8 +76,10 @@ const modes = [
 
 const UserStickers = ({
   stickers = {},
+  searchStickers = [],
   stickerForm,
-  formMode
+  searchForm,
+  stickerFormMode
 }) => (
   Section(
     {},
@@ -72,16 +88,20 @@ const UserStickers = ({
         {},
         [
           ModeSwitch({
-            currentMode: formMode,
+            currentMode: stickerFormMode,
             onModeClick: handleModeClick,
             modes
           }),
-          AddStickerForm({ ...stickerForm, formMode, stickers })
+          stickerFormMode === 'search'
+            ? SearchStickersForm({ searchForm })
+            : AddStickerForm({ ...stickerForm, stickerFormMode, stickers })
         ]
       ),
       StickerGrid(
         {},
-        Object.entries(stickers).map(renderSticker(stickerForm))
+        stickerFormMode === 'search'
+          ? searchStickers.map(renderSearchSticker)
+          : Object.entries(stickers).map(renderSticker(stickerForm))
       )
     ]
   )

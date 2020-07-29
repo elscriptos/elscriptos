@@ -8,6 +8,7 @@ const INITIAL_STATE = {
   cache: {},
   userStickers: {},
   metaStickers: createMetaStickers(),
+  searchStickers: [],
   inputValue: '',
   isOverlayOpen: false,
   separator: config.separator
@@ -62,6 +63,11 @@ export default function reducer(
       return {
         ...state,
         metaStickers: action.metaStickers
+      }
+    case Types.SEARCH_STICKERS_CHANGED:
+      return {
+        ...state,
+        searchStickers: action.searchStickers
       }
     default:
       return state

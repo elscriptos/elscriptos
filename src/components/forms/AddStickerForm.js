@@ -53,7 +53,7 @@ const handleAddSticker = stateStoreEvent(
 const handleRemoveSticker = stateStoreEvent(
   state => ({
     ...state,
-    formMode: 'ajouter',
+    stickerFormMode: 'ajouter',
     stickerForm: {
       lastCode: '',
       code: '',
@@ -66,7 +66,7 @@ const handleRemoveSticker = stateStoreEvent(
 const handleEditSticker = stateStoreEvent(
   state => ({
     ...state,
-    formMode: 'ajouter',
+    stickerFormMode: 'ajouter',
     stickerForm: {
       lastCode: '',
       code: '',
@@ -97,7 +97,7 @@ const AddStickerForm = ({
   code,
   url,
   stickers,
-  formMode
+  stickerFormMode
 }) => (
   Container(
     {},
@@ -119,7 +119,7 @@ const AddStickerForm = ({
           value: url
         }
       ),
-      formMode === 'modifier' &&
+      stickerFormMode === 'modifier' &&
         Button(
           {
             class: ButtonClass,
@@ -132,9 +132,9 @@ const AddStickerForm = ({
         {
           class: ButtonClass,
           primary: true,
-          onclick: formMode === 'modifier' ? handleEditSticker : handleAddSticker
+          onclick: stickerFormMode === 'modifier' ? handleEditSticker : handleAddSticker
         },
-        text(formMode === 'modifier' ? 'Modifier' : 'Ajouter')
+        text(stickerFormMode === 'modifier' ? 'Modifier' : 'Ajouter')
       )
     ]
   )

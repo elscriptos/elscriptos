@@ -2,7 +2,7 @@ import { Types, Creators } from './actionTypes'
 import { editor } from '../services/elements'
 import { fillPreview, fillInput } from '../services/input'
 import { setFromObject } from '../utils/object'
-import { getMetaStickers } from '../services/stickers'
+import { getMetaStickers, getStickers } from '../services/stickers'
 
 function handleRisibankStickerAdded(store) {
   const { value } = editor
@@ -30,11 +30,18 @@ async function handleOverlayToggled(store) {
   store.dispatch(Creators.metaStickersLoaded(metaStickers))
 }
 
+async function handleSearchQueryChanged(store, { query }) {
+  console.log('query', query)
+  const stickers = await getStickers(query)
+  store.dispatch(Creators.searchStickersChanged(stickers))
+}
+
 const handlers = {
   [Types.RISIBANK_STICKER_ADDED]: handleRisibankStickerAdded,
   [Types.INPUT_CHANGED]: handleInputChanged,
   [Types.POST_BUTTON_CLICKED]: handlePostButtonClicked,
-  [Types.OVERLAY_TOGGLED]: handleOverlayToggled
+  [Types.OVERLAY_TOGGLED]: handleOverlayToggled,
+  [Types.SEARCH_QUERY_CHANGED]: handleSearchQueryChanged
 }
 
 export default store => next => action => {

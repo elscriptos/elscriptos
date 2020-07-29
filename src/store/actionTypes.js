@@ -53,6 +53,16 @@ const userStickerEdited = (lastCode, code, url) => ({
   url
 })
 
+const searchQueryChanged = query => ({
+  type: Types.SEARCH_QUERY_CHANGED,
+  query
+})
+
+const searchStickersChanged = searchStickers => ({
+  type: Types.SEARCH_STICKERS_CHANGED,
+  searchStickers
+})
+
 export const Types = {
   // UI
   INPUT_CHANGED: 'INPUT_CHANGED',
@@ -67,6 +77,8 @@ export const Types = {
   USER_STICKER_REMOVED: 'USER_STICKER_REMOVED',
   USER_STICKER_EDITED: 'USER_STICKER_EDITED',
   META_STICKERS_LOADED: 'META_STICKERS_LOADED',
+  SEARCH_QUERY_CHANGED: 'SEARCH_QUERY_CHANGED',
+  SEARCH_STICKERS_CHANGED: 'SEARCH_STICKERS_CHANGED'
 }
 
 export const Creators = {
@@ -81,5 +93,7 @@ export const Creators = {
   userStickerAdded,
   userStickerRemoved,
   userStickerEdited,
-  metaStickersLoaded
+  metaStickersLoaded,
+  searchQueryChanged,
+  searchStickersChanged
 }

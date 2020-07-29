@@ -14,47 +14,31 @@ const Section = style('section')({
 
 const handleStickerClick = (code, url) => stateEvent(state => ({
   ...state,
-  formMode: 'ajouter',
+  stickerFormMode: 'ajouter',
   stickerForm: {
     code,
     url
   }
 }))
 
-const handleModeClick = stateEvent((state, _, mode) => ({
-  ...state,
-  metaMode: mode.id
-}))
-
-const renderSticker = ({ risibank_link: url }) => 
-    StickerListItem({
-      key: url,
-      code: '',
-      url,
-      onclick: handleStickerClick('', url)
-    })
+const renderSticker = ([code, url]) => 
+  StickerListItem({
+    key: code,
+    code,
+    url,
+    onclick: handleStickerClick(code, url)
+  })
 
 const modes = [
   {
     id: 'recent',
-    label: 'Nouveautés',
-    selectable: true
-  },
-  {
-    id: 'trending',
-    label: 'Populaires',
-    selectable: true
-  },
-  {
-    id: 'random',
-    label: 'Aléatoires',
-    selectable: true
+    label: 'En cache',
+    selectable: false
   }
 ]
 
-const MetaStickers = ({
-  metaStickers,
-  metaMode
+const RecentStickers = ({
+  cache = {}
 }) => (
   Section(
     {},
@@ -62,17 +46,16 @@ const MetaStickers = ({
       SectionHeader(
         {},
         ModeSwitch({
-          currentMode: metaMode,
-          onModeClick: handleModeClick,
+          currentMode: 'recent',
           modes
         })
       ),
       StickerGrid(
         {},
-        (metaStickers[metaMode] || []).map(renderSticker)
+        Object.entries(cache).map(renderSticker)
       )
     ]
   )
 )
 
-export default MetaStickers
+export default RecentStickers
